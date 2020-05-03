@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "454064622365",
+    "firebase_url": "https://transporto-registravimas-bd.firebaseio.com",
+    "project_id": "transporto-registravimas-bd",
+    "storage_bucket": "transporto-registravimas-bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454064622365:android:3ae85efeebfb7d8dcb2ff4",
+        "android_client_info": {
+          "package_name": "ernestasdev.transporto_registravimas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454064622365-pbqv0m1731865gjpuedipbe911728lrt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7NQ78qLitZQJL5blBv-we0ILJKdtdO7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454064622365-pbqv0m1731865gjpuedipbe911728lrt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
