@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transporto_registravimas/services/authentication.dart';
 import 'package:transporto_registravimas/pages/root_page.dart';
+import 'package:transporto_registravimas/pages/welcome.dart';
 
 void main() {
   runApp(new MyApp());
@@ -15,6 +16,6 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: new RootPage(auth: new Auth()));
+        home: new WelcomePage());
   }
 }
