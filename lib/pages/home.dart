@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:transporto_registravimas/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:transporto_registravimas/models/todo.dart';
+import 'package:transporto_registravimas/models/vehicle.dart';
+import 'package:transporto_registravimas/pages/vehicle_seling.dart';
 import 'dart:async';
 
 class HomePage extends StatefulWidget {
@@ -18,117 +20,59 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Todo> _todoList;
+  List<Vehicle> _vehicleList;
 
+  String radioItem = '';
+  String _selection = '';
+  String _selectionFunction = '';
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final _textEditingController = TextEditingController();
-  StreamSubscription<Event> _onTodoAddedSubscription;
-  StreamSubscription<Event> _onTodoChangedSubscription;
 
-  Query _todoQuery;
+  StreamSubscription<Event> _onVehicleChangedSubscription;
+  StreamSubscription<Event> _onVehicleAddedSubscription;
 
-  //bool _isEmailVerified = false;
+  Query _vehicleQuery;
 
   @override
   void initState() {
     super.initState();
 
-    //_checkEmailVerification();
+    _vehicleList = new List();
 
-    _todoList = new List();
-    _todoQuery = _database
+    _vehicleQuery = _database
         .reference()
-        .child("todo")
+        .child("vehicle")
         .orderByChild("userId")
         .equalTo(widget.userId);
-    _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(onEntryAdded);
-    _onTodoChangedSubscription =
-        _todoQuery.onChildChanged.listen(onEntryChanged);
+    _onVehicleAddedSubscription =
+        _vehicleQuery.onChildAdded.listen(onEntryAdded);
+    _onVehicleChangedSubscription =
+        _vehicleQuery.onChildChanged.listen(onEntryChanged);
   }
-
-//  void _checkEmailVerification() async {
-//    _isEmailVerified = await widget.auth.isEmailVerified();
-//    if (!_isEmailVerified) {
-//      _showVerifyEmailDialog();
-//    }
-//  }
-
-//  void _resentVerifyEmail(){
-//    widget.auth.sendEmailVerification();
-//    _showVerifyEmailSentDialog();
-//  }
-
-//  void _showVerifyEmailDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content: new Text("Please verify account in the link sent to email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Resent link"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//                _resentVerifyEmail();
-//              },
-//            ),
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-//  void _showVerifyEmailSentDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content: new Text("Link to verify account has been sent to your email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
 
   @override
   void dispose() {
-    _onTodoAddedSubscription.cancel();
-    _onTodoChangedSubscription.cancel();
+    _onVehicleAddedSubscription.cancel();
+    _onVehicleChangedSubscription.cancel();
     super.dispose();
   }
 
   onEntryChanged(Event event) {
-    var oldEntry = _todoList.singleWhere((entry) {
+    var oldEntry = _vehicleList.singleWhere((entry) {
       return entry.key == event.snapshot.key;
     });
 
     setState(() {
-      _todoList[_todoList.indexOf(oldEntry)] =
-          Todo.fromSnapshot(event.snapshot);
+      _vehicleList[_vehicleList.indexOf(oldEntry)] =
+          Vehicle.fromSnapshot(event.snapshot);
     });
   }
 
   onEntryAdded(Event event) {
     setState(() {
-      _todoList.add(Todo.fromSnapshot(event.snapshot));
+      _vehicleList.add(Vehicle.fromSnapshot(event.snapshot));
     });
   }
 
@@ -141,129 +85,188 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  addNewTodo(String todoItem) {
-    if (todoItem.length > 0) {
-      Todo todo = new Todo(todoItem.toString(), widget.userId, false);
-      _database.reference().child("todo").push().set(todo.toJson());
-    }
-  }
 
-  updateTodo(Todo todo) {
-    //Toggle completed
-    todo.completed = !todo.completed;
-    if (todo != null) {
-      _database.reference().child("todo").child(todo.key).set(todo.toJson());
-    }
-  }
 
-  deleteTodo(String todoId, int index) {
-    _database.reference().child("todo").child(todoId).remove().then((_) {
-      print("Delete $todoId successful");
-      setState(() {
-        _todoList.removeAt(index);
-      });
-    });
-  }
 
-  showAddTodoDialog(BuildContext context) async {
-    _textEditingController.clear();
-    await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Row(
-              children: <Widget>[
-                new Expanded(
-                    child: new TextField(
-                      controller: _textEditingController,
-                      autofocus: true,
-                      decoration: new InputDecoration(
-                        labelText: 'Add new todo',
-                      ),
-                    ))
-              ],
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              new FlatButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    addNewTodo(_textEditingController.text.toString());
-                    Navigator.pop(context);
-                  })
-            ],
-          );
-        });
-  }
+  Widget showVehicleList() {
 
-  Widget showTodoList() {
-    if (_todoList.length > 0) {
+
+    if (_vehicleList.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: _todoList.length,
+          itemCount: _vehicleList.length,
           itemBuilder: (BuildContext context, int index) {
-            String todoId = _todoList[index].key;
-            String subject = _todoList[index].subject;
-            bool completed = _todoList[index].completed;
-            String userId = _todoList[index].userId;
-            return Dismissible(
-              key: Key(todoId),
-              background: Container(color: Colors.red),
-              onDismissed: (direction) async {
-                deleteTodo(todoId, index);
-              },
-              child: ListTile(
-                title: Text(
-                  subject,
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                trailing: IconButton(
-                    icon: (completed)
-                        ? Icon(
-                      Icons.done_outline,
-                      color: Colors.green,
-                      size: 20.0,
-                    )
-                        : Icon(Icons.done, color: Colors.grey, size: 20.0),
-                    onPressed: () {
-                      updateTodo(_todoList[index]);
-                    }),
+            String vehicleId = _vehicleList[index].key;
+            String name = _vehicleList[index].name;
+            String vin = _vehicleList[index].vin;
+            String registrationNr = _vehicleList[index].registrationNr;
+            return Container(
+              child: Column(
+                key: Key(vehicleId),
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Radio(
+                        groupValue: radioItem,
+                        value: name,
+                        onChanged: (val) {
+                          setState(() {
+                            radioItem = val;
+                            _selection = val;
+
+
+                          });
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          name,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Valst. Nr: ' + registrationNr,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(60.0, 8.0, 8.0, 8.0),
+                        child: Text(
+                          "VIN: " + vin,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             );
           });
     } else {
       return Center(
           child: Text(
-            "Welcome. Your list is empty",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 30.0),
-          ));
+        "Šiuo metu neturite transporto priemonių",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 30.0),
+      ));
     }
+  }
+
+  Widget showOptions(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {
+                  Route route = MaterialPageRoute(
+                      builder: (context) => new VehicleSellingPage());
+                  Navigator.push(context, route);
+                },
+                child: Text('Parduodu transporto priemonę'),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {},
+                child: Text('Perku transporto priemonę'),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {},
+                child: Text('Keičiu valdytoją'),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {},
+                child: Text('Užsakau registracijos numerį'),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {},
+                child: Text('Užsakau registracijos liudijimą'),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: () {},
+                child: Text('Skaičiuoju registracijos mokestį'),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Transporto priemonių registravimo elektroninė paslauga'),
-          actions: <Widget>[
-            new FlatButton(
-                child: new Text('Logout',
-                    style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-                onPressed: signOut)
-          ],
-        ),
-        body: showTodoList(),
+      appBar: new AppBar(
+        title:
+            new Text('Transporto priemonių registravimo elektroninė paslauga'),
+        actions: <Widget>[
+          new FlatButton(
+              child: new Text('Atsijungti',
+                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+              onPressed: signOut)
+        ],
+      ),
+      body: new ListView(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 250.0),
+            child: showVehicleList(),
+          ),
+          showOptions(context),
+        ],
+      ),
+      /*
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showAddTodoDialog(context);
           },
           tooltip: 'Increment',
           child: Icon(Icons.add),
-        ));
+        )
+        */
+    );
   }
 }

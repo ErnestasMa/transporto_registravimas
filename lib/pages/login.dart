@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               showEmailInput(),
               showPasswordInput(),
               showPrimaryButton(),
-              showSecondaryButton(),
+              //showSecondaryButton(),
               showErrorMessage(),
             ],
           ),
@@ -192,12 +192,12 @@ class _LoginPageState extends State<LoginPage> {
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
         decoration: new InputDecoration(
-            hintText: 'Email',
+            hintText: 'El. Paštas',
             icon: new Icon(
               Icons.mail,
               color: Colors.grey,
             )),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+        validator: (value) => value.isEmpty ? 'Šis laukas negali būti tuščias' : null,
         onSaved: (value) => _email = value.trim(),
       ),
     );
@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: true,
         autofocus: false,
         decoration: new InputDecoration(
-            hintText: 'Password',
+            hintText: 'Slaptažodis',
             icon: new Icon(
               Icons.lock,
               color: Colors.grey,
@@ -240,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(30.0)),
             color: Colors.blue,
-            child: new Text(_isLoginForm ? 'Login' : 'Create account',
+            child: new Text(_isLoginForm ? 'Prisijungti' : 'Create account',
                 style: new TextStyle(fontSize: 20.0, color: Colors.white)),
             onPressed: validateAndSubmit,
           ),

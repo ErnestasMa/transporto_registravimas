@@ -3,7 +3,6 @@ import 'package:transporto_registravimas/services/authentication.dart';
 import 'package:transporto_registravimas/pages/root_page.dart';
 
 class WelcomePage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => new _WelcomePage();
 }
@@ -12,6 +11,7 @@ class _WelcomePage extends State<WelcomePage> {
   String _selection = '';
   String radioItem = '';
   String _errorMessage = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +30,7 @@ class _WelcomePage extends State<WelcomePage> {
   }
 
   Widget _showLoginButton(BuildContext context) {
-    if (_selection== 'parašas' && _selection != null) {
+    if (_selection == 'parašas' && _selection != null) {
       return new Container(
           padding: EdgeInsets.all(16.0),
           child: RaisedButton(
@@ -65,7 +65,8 @@ class _WelcomePage extends State<WelcomePage> {
   Widget radiobutton(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text('Pasirinkti būdą asmens tapatybės nustatymui:', style: TextStyle(fontSize: 18)),
+        Text('Pasirinkti būdą asmens tapatybės nustatymui:',
+            style: TextStyle(fontSize: 18)),
         RadioListTile(
           groupValue: radioItem,
           title: Text('m.parašu'),
@@ -73,12 +74,11 @@ class _WelcomePage extends State<WelcomePage> {
           onChanged: (val) {
             setState(() {
               radioItem = val;
-              _errorMessage='';
+              _errorMessage = '';
               _selection = 'parašas';
             });
           },
         ),
-
         RadioListTile(
           groupValue: radioItem,
           title: Text('per e.valdžios vartus'),
@@ -86,7 +86,8 @@ class _WelcomePage extends State<WelcomePage> {
           onChanged: (val) {
             setState(() {
               radioItem = val;
-              _errorMessage='Prisijungimas per e.valdžios vartus nėra galimas';
+              _errorMessage =
+                  'Prisijungimas per e.valdžios vartus nėra galimas';
               _selection = 'vartai';
             });
           },
