@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transporto_registravimas/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:transporto_registravimas/models/todo.dart';
+
 import 'package:transporto_registravimas/models/vehicle.dart';
 import 'package:transporto_registravimas/pages/vehicle_seling.dart';
 import 'dart:async';
@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Todo> _todoList;
+
   List<Vehicle> _vehicleList;
 
   String radioItem = '';
@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    print(widget.userId);
     _vehicleList = new List();
 
     _vehicleQuery = _database
@@ -89,8 +90,6 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget showVehicleList() {
-
-
     if (_vehicleList.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
@@ -113,8 +112,6 @@ class _HomePageState extends State<HomePage> {
                           setState(() {
                             radioItem = val;
                             _selection = val;
-
-
                           });
                         },
                       ),

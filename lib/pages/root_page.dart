@@ -10,9 +10,10 @@ enum AuthStatus {
 }
 
 class RootPage extends StatefulWidget {
-  RootPage({this.auth});
+  const RootPage({this.auth, this.selection});
 
   final BaseAuth auth;
+  final String selection;
 
   @override
   State<StatefulWidget> createState() => new _RootPageState();
@@ -73,6 +74,7 @@ class _RootPageState extends State<RootPage> {
         return new LoginPage(
           auth: widget.auth,
           loginCallback: loginCallback,
+          selection: widget.selection,
         );
         break;
       case AuthStatus.LOGGED_IN:

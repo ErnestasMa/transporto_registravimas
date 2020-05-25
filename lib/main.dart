@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:transporto_registravimas/services/authentication.dart';
-import 'package:transporto_registravimas/pages/root_page.dart';
 import 'package:transporto_registravimas/pages/welcome.dart';
+import 'package:provider/provider.dart';
+import 'package:transporto_registravimas/providers/phone_auth.dart';
 
 void main() {
   runApp(new MyApp());
@@ -10,12 +10,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        title: 'Transporto priemonių registravimo elektroninė paslauga',
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-          primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => PhoneAuthDataProvider(),
         ),
-        home: new WelcomePage());
+      ],
+      child: MaterialApp(
+          title: 'Transporto priemonių registravimo elektroninė paslauga',
+        home: new WelcomePage(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
   }
 }

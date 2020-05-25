@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:transporto_registravimas/services/authentication.dart';
-import 'package:transporto_registravimas/pages/root_page.dart';
+import 'package:transporto_registravimas/services/get_phone.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -16,10 +15,16 @@ class _WelcomePage extends State<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Transporto priemonių registravimo elektroninė paslauga'),
+        title: Text(
+          'Transporto priemonių registravimo sistema',
+          style: TextStyle(
+            fontSize: 18.0,
+          ),
+        ),
       ),
       body: new ListView(
         children: <Widget>[
+          showWelcome(),
           showLogo(),
           radiobutton(context),
           _showLoginButton(context),
@@ -34,9 +39,10 @@ class _WelcomePage extends State<WelcomePage> {
       return new Container(
           padding: EdgeInsets.all(16.0),
           child: RaisedButton(
+            elevation: 5.0,
             onPressed: () {
               Route route = MaterialPageRoute(
-                  builder: (context) => new RootPage(auth: new Auth()));
+                  builder: (context) => new PhoneAuthGetPhone());
               Navigator.push(context, route);
             },
             child: Text('Prisijungti'),
@@ -66,11 +72,12 @@ class _WelcomePage extends State<WelcomePage> {
     return Column(
       children: <Widget>[
         Text('Pasirinkti būdą asmens tapatybės nustatymui:',
-            style: TextStyle(fontSize: 18)),
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
         RadioListTile(
           groupValue: radioItem,
-          title: Text('m.parašu'),
-          value: 'm.parašu',
+          title: Text('M.parašas'),
+          value: 'M.parašas',
           onChanged: (val) {
             setState(() {
               radioItem = val;
@@ -81,8 +88,8 @@ class _WelcomePage extends State<WelcomePage> {
         ),
         RadioListTile(
           groupValue: radioItem,
-          title: Text('per e.valdžios vartus'),
-          value: 'per e.valdžios vartus',
+          title: Text('E.valdžios vartai'),
+          value: 'E.valdžios vartai',
           onChanged: (val) {
             setState(() {
               radioItem = val;
@@ -98,18 +105,33 @@ class _WelcomePage extends State<WelcomePage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
-        _errorMessage,
-        style: TextStyle(
-            fontSize: 15.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
+      return Center(
+        child: new Text(
+          _errorMessage,
+          style: TextStyle(
+              fontSize: 18.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        ),
       );
     } else {
       return new Container(
         height: 0.0,
       );
     }
+  }
+
+  Widget showWelcome() {
+    return new Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 200.0),
+          ),
+        ],
+      ),
+    );
   }
 }
