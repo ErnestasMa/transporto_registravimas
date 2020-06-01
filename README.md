@@ -1,6 +1,6 @@
 # transporto_registravimas
 
-Regitros Transporto registravimo paslaugos mobili programa, kaip Baigiamasis bakalauro darbas
+
 
 ## Getting Started
 
