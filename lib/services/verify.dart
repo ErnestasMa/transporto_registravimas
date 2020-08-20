@@ -223,7 +223,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
     uID = Provider.of<PhoneAuthDataProvider>(context, listen: false).userId;
 
     await Future.delayed(Duration(seconds: 1));
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (BuildContext context) => HomePage(userId: uID)));
   }
 
@@ -237,6 +237,6 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   }
 
   onAutoRetrievalTimeOut() {
-    _showSnackBar("PhoneAuth autoretrieval timeout");
+    _showSnackBar("PhoneAuth auto retrieval timeout");
   }
 }

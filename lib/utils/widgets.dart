@@ -38,7 +38,7 @@ class PhoneNumberField extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 errorMaxLines: 1,
-                hintText: '+370'
+                prefixText: '+370 '
               ),
             ),
           ),
@@ -47,6 +47,45 @@ class PhoneNumberField extends StatelessWidget {
     );
   }
 }
+
+class IDNumberField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const IDNumberField({Key key, this.controller})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: Colors.grey, spreadRadius: 1),
+        ],
+      ),
+      height: 50,
+      child: Row(
+        children: <Widget>[
+          SizedBox(width: 8.0),
+          Expanded(
+            child: TextFormField(
+              controller: controller,
+              autofocus: false,
+              keyboardType: TextInputType.phone,
+              key: Key('EnterId-TextFormField'),
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  errorMaxLines: 1,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 class SubTitle extends StatelessWidget {
   final String text;

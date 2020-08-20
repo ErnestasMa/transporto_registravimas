@@ -7,10 +7,6 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePage extends State<WelcomePage> {
-  String _selection = '';
-  String radioItem = '';
-  String _errorMessage = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,32 +22,25 @@ class _WelcomePage extends State<WelcomePage> {
         children: <Widget>[
           showWelcome(),
           showLogo(),
-          radiobutton(context),
           _showLoginButton(context),
-          _showErrorMessage(),
         ],
       ),
     );
   }
 
   Widget _showLoginButton(BuildContext context) {
-    if (_selection == 'parašas' && _selection != null) {
-      return new Container(
-          padding: EdgeInsets.all(16.0),
-          child: RaisedButton(
-            elevation: 5.0,
-            onPressed: () {
-              Route route = MaterialPageRoute(
-                  builder: (context) => new PhoneAuthGetPhone());
-              Navigator.push(context, route);
-            },
-            child: Text('Prisijungti'),
-          ));
-    } else {
-      return new Container(
-        height: 0.0,
-      );
-    }
+    return new Container(
+        padding:
+            EdgeInsets.only(left: 32.0, top: 400, bottom: 16.0, right: 32.0),
+        child: RaisedButton(
+          elevation: 5.0,
+          onPressed: () {
+            Route route = MaterialPageRoute(
+                builder: (context) => new PhoneAuthGetPhone());
+            Navigator.push(context, route);
+          },
+          child: Text('Pradėti'),
+        ));
   }
 
   Widget showLogo() {
@@ -68,68 +57,14 @@ class _WelcomePage extends State<WelcomePage> {
     );
   }
 
-  Widget radiobutton(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text('Pasirinkti būdą asmens tapatybės nustatymui:',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
-        RadioListTile(
-          groupValue: radioItem,
-          title: Text('M.parašas'),
-          value: 'M.parašas',
-          onChanged: (val) {
-            setState(() {
-              radioItem = val;
-              _errorMessage = '';
-              _selection = 'parašas';
-            });
-          },
-        ),
-        RadioListTile(
-          groupValue: radioItem,
-          title: Text('E.valdžios vartai'),
-          value: 'E.valdžios vartai',
-          onChanged: (val) {
-            setState(() {
-              radioItem = val;
-              _errorMessage =
-                  'Prisijungimas per e.valdžios vartus nėra galimas';
-              _selection = 'vartai';
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _showErrorMessage() {
-    if (_errorMessage.length > 0 && _errorMessage != null) {
-      return Center(
-        child: new Text(
-          _errorMessage,
-          style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.red,
-              height: 1.0,
-              fontWeight: FontWeight.w300),
-        ),
-      );
-    } else {
-      return new Container(
-        height: 0.0,
-      );
-    }
-  }
-
   Widget showWelcome() {
     return new Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 200.0),
-          ),
+              padding: const EdgeInsets.only(top: 50.0),
+              child: new Text('Sveiki,', style: TextStyle(fontSize: 42))),
         ],
       ),
     );

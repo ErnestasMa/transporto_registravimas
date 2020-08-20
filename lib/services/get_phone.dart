@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:transporto_registravimas/services/verify.dart';
 import 'package:transporto_registravimas/providers/phone_auth.dart';
 import 'package:provider/provider.dart';
@@ -70,9 +71,9 @@ class _PhoneAuthGetPhoneState extends State<PhoneAuthGetPhone> {
         children: <Widget>[
           Padding(
             padding:
-                const EdgeInsets.only(bottom: 35.0, left: 25.0, right: 25.0),
+                const EdgeInsets.only(bottom: 16.0, left: 25.0, right: 25.0),
             child: Text('Prašome įvesti mobilujį telefono numerį:',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24.0,
@@ -87,6 +88,31 @@ class _PhoneAuthGetPhoneState extends State<PhoneAuthGetPhone> {
               controller:
                   Provider.of<PhoneAuthDataProvider>(context, listen: false)
                       .phoneNumberController,
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 16.0, left: 25.0, right: 25.0),
+                child: Text('Asmens kodą:',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w600)),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: _fixedPadding,
+                right: _fixedPadding,
+                bottom: _fixedPadding),
+            child: IDNumberField(
+              controller:
+                  Provider.of<PhoneAuthDataProvider>(context, listen: false)
+                      .idNumberController,
             ),
           ),
           Row(
@@ -142,6 +168,8 @@ class _PhoneAuthGetPhoneState extends State<PhoneAuthGetPhone> {
   startPhoneAuth() async {
     final phoneAuthDataProvider =
         Provider.of<PhoneAuthDataProvider>(context, listen: false);
+    phoneAuthDataProvider.phoneNumberController.text =
+        '+370' + phoneAuthDataProvider.phoneNumberController.text;
     phoneAuthDataProvider.loading = true;
     bool validPhone = await phoneAuthDataProvider.instantiate(onCodeSent: () {
       Navigator.of(context).pushReplacement(CupertinoPageRoute(

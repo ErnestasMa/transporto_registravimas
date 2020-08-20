@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:transporto_registravimas/pages/polution_calc.dart';
+import 'package:transporto_registravimas/pages/vehicle_buy.dart';
 import 'package:transporto_registravimas/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -19,9 +21,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   List<Vehicle> _vehicleList;
 
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String radioItem = '';
   String _selection = '';
   String _selectionFunction = '';
@@ -39,7 +41,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    print(widget.userId);
     _vehicleList = new List();
 
     _vehicleQuery = _database
@@ -86,9 +87,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-
-
   Widget showVehicleList() {
     if (_vehicleList.length > 0) {
       return ListView.builder(
@@ -99,6 +97,7 @@ class _HomePageState extends State<HomePage> {
             String name = _vehicleList[index].name;
             String vin = _vehicleList[index].vin;
             String registrationNr = _vehicleList[index].registrationNr;
+            String statusId = _vehicleList[index].statusId;
             return Container(
               child: Column(
                 key: Key(vehicleId),
@@ -107,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                     children: <Widget>[
                       Radio(
                         groupValue: radioItem,
-                        value: name,
+                        value: vin,
                         onChanged: (val) {
                           setState(() {
                             radioItem = val;
@@ -142,6 +141,27 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(60.0, 8.0, 8.0, 8.0),
+                        child: Text(
+                          "Statusas: " + statusId,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: const Divider(
+                      color: Colors.black,
+                      height: 20,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -159,84 +179,117 @@ class _HomePageState extends State<HomePage> {
   Widget showOptions(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              height: 40.0,
+              minWidth: 280.0,
+              color: Colors.white54,
+              onPressed: () {
+                print(_selection);
+                if (_selection != '') {
                   Route route = MaterialPageRoute(
-                      builder: (context) => new VehicleSellingPage());
+                      builder: (context) => new VehicleSellingPage(_selection));
                   Navigator.push(context, route);
-                },
-                child: Text('Parduodu transporto priemonę'),
-              ),
-            ],
-          ),
+                } else {
+                  _scaffoldKey.currentState.showSnackBar(new SnackBar(
+                      content:
+                          new Text('Prašome pasirinkti transporto priemonę')));
+                }
+              },
+              child: Text('Parduodu transporto priemonę'),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {},
-                child: Text('Perku transporto priemonę'),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              height: 40.0,
+              minWidth: 280.0,
+              color: Colors.white54,
+              onPressed: () {
+                Route route = MaterialPageRoute(
+                    builder: (context) => new VehicleBuyPage());
+                Navigator.push(context, route);
+              },
+              child: Text('Perku transporto priemonę'),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {},
-                child: Text('Keičiu valdytoją'),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              height: 40.0,
+              minWidth: 280.0,
+              color: Colors.white54,
+              onPressed: () {
+                print(_selection);
+              },
+              child: Text('Keičiu valdytoją'),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {},
-                child: Text('Užsakau registracijos numerį'),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              height: 40.0,
+              minWidth: 280.0,
+              color: Colors.white54,
+              onPressed: () {},
+              child: Text('Užsakau registracijos numerį'),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {},
-                child: Text('Užsakau registracijos liudijimą'),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              height: 40.0,
+              minWidth: 280.0,
+              color: Colors.white54,
+              onPressed: () {},
+              child: Text('Užsakau registracijos liudijimą'),
+            ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {},
-                child: Text('Skaičiuoju registracijos mokestį'),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              height: 40.0,
+              minWidth: 280.0,
+              color: Colors.white54,
+              onPressed: () {
+//                Route route = MaterialPageRoute(
+//                    builder: (context) => new PollutionCalcPage());
+//                Navigator.push(context, route);
+              },
+              child: Text('Skaičiuoju registracijos mokestį'),
+            ),
+          ],
         ),
       ],
     );
   }
 
+  Widget showSnackBar(BuildContext context) {
+    void showSnackBarMessage(String message,
+        [MaterialColor color = Colors.lightBlue]) {
+      Scaffold.of(context)
+          .showSnackBar(new SnackBar(content: new Text(message)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
+        automaticallyImplyLeading: false,
         title:
             new Text('Transporto priemonių registravimo elektroninė paslauga'),
         actions: <Widget>[
@@ -249,21 +302,12 @@ class _HomePageState extends State<HomePage> {
       body: new ListView(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(bottom: 250.0),
+            padding: const EdgeInsets.only(bottom: 100.0),
             child: showVehicleList(),
           ),
-          showOptions(context),
+          Container(alignment: Alignment.center, child: showOptions(context)),
         ],
       ),
-      /*
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showAddTodoDialog(context);
-          },
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        )
-        */
     );
   }
 }

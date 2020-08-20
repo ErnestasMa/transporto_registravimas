@@ -20,7 +20,7 @@ class LoginPagePhone extends StatelessWidget {
           FirebaseUser user = result.user;
 
           if(user != null){
-            Navigator.push(context, MaterialPageRoute(
+            Navigator.pushReplacement(context, MaterialPageRoute(
                 builder: (context) => HomePage()
             ));
           }else{
@@ -61,7 +61,7 @@ class LoginPagePhone extends StatelessWidget {
                         FirebaseUser user = result.user;
 
                         if(user != null){
-                          Navigator.push(context, MaterialPageRoute(
+                          Navigator.pushReplacement(context, MaterialPageRoute(
                               builder: (context) => HomePage()
                           ));
                         }else{

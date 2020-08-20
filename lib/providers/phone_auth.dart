@@ -25,6 +25,7 @@ class PhoneAuthDataProvider with ChangeNotifier {
   bool _loading = false;
 
   final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _idNumberController = TextEditingController();
 
   PhoneAuthState _status;
   var _authCredential;
@@ -244,4 +245,5 @@ class PhoneAuthDataProvider with ChangeNotifier {
   }
 
   TextEditingController get phoneNumberController => _phoneNumberController;
+  TextEditingController get idNumberController => _idNumberController;
 }
