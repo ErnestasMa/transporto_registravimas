@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:transporto_registravimas/pages/polution_calc.dart';
 import 'package:transporto_registravimas/pages/vehicle_buy.dart';
-import 'package:transporto_registravimas/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
-
 import 'package:transporto_registravimas/models/vehicle.dart';
 import 'package:transporto_registravimas/pages/vehicle_seling.dart';
 import 'dart:async';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.auth, this.userId, this.logoutCallback})
+  HomePage({Key key, this.userId, this.logoutCallback})
       : super(key: key);
 
-  final BaseAuth auth;
   final VoidCallback logoutCallback;
   final String userId;
 
@@ -26,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String radioItem = '';
   String _selection = '';
-  String _selectionFunction = '';
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -78,14 +74,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.logoutCallback();
-    } catch (e) {
-      print(e);
-    }
-  }
+
 
   Widget showVehicleList() {
     if (_vehicleList.length > 0) {
@@ -292,12 +281,7 @@ class _HomePageState extends State<HomePage> {
         automaticallyImplyLeading: false,
         title:
             new Text('Transporto priemonių registravimo elektroninė paslauga'),
-        actions: <Widget>[
-          new FlatButton(
-              child: new Text('Atsijungti',
-                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-              onPressed: signOut)
-        ],
+
       ),
       body: new ListView(
         children: <Widget>[

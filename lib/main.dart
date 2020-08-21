@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:transporto_registravimas/providers/phone_auth.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(new TPRegistration());
 }
 
-class MyApp extends StatelessWidget {
+class TPRegistration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
