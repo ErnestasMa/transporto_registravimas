@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
               minWidth: 280.0,
               color: Colors.white54,
               onPressed: () {
-                print(_selection);
+                functionNotDone();
               },
               child: Text('Keičiu valdytoją'),
             ),
@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
               height: 40.0,
               minWidth: 280.0,
               color: Colors.white54,
-              onPressed: () {},
+              onPressed: () {   functionNotDone();},
               child: Text('Užsakau registracijos numerį'),
             ),
           ],
@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
               height: 40.0,
               minWidth: 280.0,
               color: Colors.white54,
-              onPressed: () {},
+              onPressed: () {   functionNotDone();},
               child: Text('Užsakau registracijos liudijimą'),
             ),
           ],
@@ -253,6 +253,7 @@ class _HomePageState extends State<HomePage> {
               minWidth: 280.0,
               color: Colors.white54,
               onPressed: () {
+                functionNotDone();
 //                Route route = MaterialPageRoute(
 //                    builder: (context) => new PollutionCalcPage());
 //                Navigator.push(context, route);
@@ -271,6 +272,12 @@ class _HomePageState extends State<HomePage> {
       Scaffold.of(context)
           .showSnackBar(new SnackBar(content: new Text(message)));
     }
+  }
+
+  functionNotDone(){
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        content:
+        new Text('Ši funkcija nėra realizuota')));
   }
 
   @override
